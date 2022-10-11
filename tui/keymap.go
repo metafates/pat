@@ -13,6 +13,7 @@ type keymap struct {
 	Save,
 
 	Back,
+	Reset,
 
 	Quit,
 	ForceQuit key.Binding
@@ -47,6 +48,10 @@ func (k *keymap) init() {
 	k.Save = key.NewBinding(
 		key.WithKeys("s"),
 		key.WithHelp("s", "Add the current list"),
+	)
+	k.Reset = key.NewBinding(
+		key.WithKeys("backspace"),
+		key.WithHelp("backspace", "Reset the current list"),
 	)
 }
 

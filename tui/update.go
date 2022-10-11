@@ -76,6 +76,20 @@ func (m *Model) updatePathSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch {
 		case key.Matches(msg, m.keymap.Quit):
 			return m, tea.Quit
+		case key.Matches(msg, m.keymap.Reset):
+			for _, it := range m.pathSelectC.Items() {
+				item, ok := it.(*item)
+				if !ok {
+					continue
+				}
+
+				p, ok := item.internal.(*path.Path)
+				if !ok {
+					continue
+				}
+
+				m.onSave[p.String()] = actionNone
+			}
 		case key.Matches(msg, m.keymap.Delete):
 			index := m.pathSelectC.Index()
 			item, ok := m.pathSelectC.SelectedItem().(*item)

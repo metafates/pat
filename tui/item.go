@@ -1,6 +1,9 @@
 package tui
 
 import (
+	"fmt"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/metafates/pat/color"
 	"github.com/metafates/pat/icon"
 	"github.com/metafates/pat/path"
 	"github.com/metafates/pat/shell"
@@ -31,9 +34,9 @@ func (i *item) marked() (markIcon string, marked bool) {
 
 		switch pathAction {
 		case actionAdd:
-			return icon.Heart, true
+			return lipgloss.NewStyle().Foreground(color.Green).Render(icon.Check), true
 		case actionDelete:
-			return icon.Trash, true
+			return lipgloss.NewStyle().Foreground(color.Red).Render(icon.Cross), true
 		default:
 			return
 		}
@@ -75,7 +78,14 @@ func (i *item) Description() string {
 	case shell.Shell:
 		return lo.Must(exec.LookPath(i.Name()))
 	case *path.Path:
-		return util.Quantify(i.Entries(), "entry", "entries")
+		if !i.Exists() {
+			return "Nonexistent"
+		}
+
+		entries := util.Quantify(len(i.Entries()), "entry", "entries")
+		size := i.SizeHuman()
+
+		return fmt.Sprintf("%s, %s", entries, size)
 	default:
 		panic("unknown type")
 	}
