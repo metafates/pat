@@ -39,7 +39,7 @@ func (f *Fish) RemovePath(path string) error {
 		cmd(
 			fmt.Sprintf(`
 if set -l index (contains -i "%s" "%s")
-	set --erase --universal fish_user_paths[$index]
+	set --erase --universal PATH[$index]
 end
 `, path, p),
 		).
@@ -47,7 +47,7 @@ end
 }
 
 func (f *Fish) Paths() ([]string, error) {
-	cmd := f.cmd("set -S fish_user_paths")
+	cmd := f.cmd("set -S PATH")
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, err
