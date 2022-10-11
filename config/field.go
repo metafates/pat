@@ -2,12 +2,12 @@ package config
 
 import (
 	"fmt"
-	"github.com/metafates/go-template/constant"
+	"github.com/metafates/pat/constant"
 	"reflect"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/metafates/go-template/color"
+	"github.com/metafates/pat/color"
 	"github.com/spf13/viper"
 )
 

@@ -1,7 +1,7 @@
 package constant
 
 const (
-	App     = "app"
+	App     = "pat"
 	Version = "0.0.1"
 )
 

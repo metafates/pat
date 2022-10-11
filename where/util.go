@@ -1,7 +1,7 @@
 package where
 
 import (
-	"github.com/metafates/go-template/filesystem"
+	"github.com/metafates/pat/filesystem"
 	"github.com/samber/lo"
 	"os"
 )

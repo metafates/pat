@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/metafates/go-template/cmd"
-	"github.com/metafates/go-template/config"
-	"github.com/metafates/go-template/log"
+	"github.com/metafates/pat/cmd"
+	"github.com/metafates/pat/config"
+	"github.com/metafates/pat/log"
 	"github.com/samber/lo"
 )
 

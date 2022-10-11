@@ -6,8 +6,8 @@ import (
 	"runtime"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/metafates/go-template/color"
-	"github.com/metafates/go-template/constant"
+	"github.com/metafates/pat/color"
+	"github.com/metafates/pat/constant"
 	"github.com/spf13/cobra"
 )
 

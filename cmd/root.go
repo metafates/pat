@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/charmbracelet/lipgloss"
 	cc "github.com/ivanpirog/coloredcobra"
-	"github.com/metafates/go-template/color"
-	"github.com/metafates/go-template/constant"
-	"github.com/metafates/go-template/filesystem"
-	"github.com/metafates/go-template/icon"
-	"github.com/metafates/go-template/log"
-	"github.com/metafates/go-template/where"
+	"github.com/metafates/pat/color"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/filesystem"
+	"github.com/metafates/pat/icon"
+	"github.com/metafates/pat/log"
+	"github.com/metafates/pat/tui"
+	"github.com/metafates/pat/where"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
@@ -20,6 +21,9 @@ var rootCmd = &cobra.Command{
 	Use:     strings.ToLower(constant.App),
 	Short:   "App description",
 	Version: constant.Version,
+	Run: func(cmd *cobra.Command, args []string) {
+		handleErr(tui.Run())
+	},
 }
 
 func Execute() {

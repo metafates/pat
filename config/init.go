@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/metafates/go-template/constant"
-	"github.com/metafates/go-template/filesystem"
-	"github.com/metafates/go-template/where"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/filesystem"
+	"github.com/metafates/pat/where"
 	"github.com/spf13/viper"
 	"strings"
 )

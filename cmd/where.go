@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/metafates/go-template/color"
-	"github.com/metafates/go-template/constant"
-	"github.com/metafates/go-template/util"
-	"github.com/metafates/go-template/where"
+	"github.com/metafates/pat/color"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/util"
+	"github.com/metafates/pat/where"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"os"

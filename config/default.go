@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/metafates/go-template/constant"
+	"github.com/metafates/pat/constant"
 	"github.com/spf13/viper"
 )
 

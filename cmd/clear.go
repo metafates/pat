@@ -3,12 +3,12 @@ package cmd
 import (
 	"fmt"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/metafates/go-template/color"
-	"github.com/metafates/go-template/constant"
-	"github.com/metafates/go-template/filesystem"
-	"github.com/metafates/go-template/icon"
-	"github.com/metafates/go-template/util"
-	"github.com/metafates/go-template/where"
+	"github.com/metafates/pat/color"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/filesystem"
+	"github.com/metafates/pat/icon"
+	"github.com/metafates/pat/util"
+	"github.com/metafates/pat/where"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 )
