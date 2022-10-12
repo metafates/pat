@@ -4,6 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/metafates/pat/color"
 	"github.com/metafates/pat/path"
 	"github.com/metafates/pat/shell"
 	"github.com/metafates/pat/stack"
@@ -54,7 +56,17 @@ func NewModel() *Model {
 	}()
 
 	newList := func(title, singular, plural string) *list.Model {
-		l := list.New(make([]list.Item, 0), list.NewDefaultDelegate(), 0, 0)
+		delegate := list.NewDefaultDelegate()
+		delegate.Styles.SelectedTitle = lipgloss.NewStyle().
+			Border(lipgloss.ThickBorder(), false, false, false, true).
+			BorderForeground(lipgloss.Color("5")).
+			Foreground(lipgloss.Color("5")).
+			Padding(0, 0, 0, 1)
+		delegate.Styles.NormalTitle = delegate.Styles.NormalTitle.Copy().Foreground(color.White)
+
+		delegate.Styles.SelectedDesc = delegate.Styles.SelectedTitle.Copy()
+
+		l := list.New(make([]list.Item, 0), delegate, 0, 0)
 		l.Title = title
 		l.SetStatusBarItemName(singular, plural)
 		l.AdditionalShortHelpKeys = model.keymap.AdditionalShortHelpKeys

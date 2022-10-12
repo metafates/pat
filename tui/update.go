@@ -260,6 +260,7 @@ func (m *Model) updatePathAdd(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			m.setAction(p, actionAdd)
 			m.pathSelectC.InsertItem(-1, m.newItem(p))
+			m.pathSelectC.Select(0)
 			m.textInputC.SetValue("")
 			return m, nil
 		}

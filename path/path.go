@@ -23,18 +23,8 @@ func (p *Path) String() string {
 }
 
 func New(path string) *Path {
-	var (
-		abs string
-		err error
-	)
-
-	abs, err = filepath.Abs(path)
-	if err != nil {
-		abs = path
-	}
-
 	return &Path{
-		raw:          abs,
+		raw:          path,
 		size:         mo.None[int64](),
 		entries:      mo.None[[]*Path](),
 		exists:       mo.None[bool](),
