@@ -54,7 +54,7 @@ func (f *Fish) Overwrite(paths []string) error {
 
 	for _, p := range paths {
 		builder.WriteString(fmt.Sprintf(`"%s"`, p))
-		builder.WriteString("")
+		builder.WriteString(" ")
 	}
 
 	return f.cmd("set --universal fish_user_paths " + builder.String()).Run()

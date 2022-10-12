@@ -237,10 +237,10 @@ func (m *Model) updateConfirmActions(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, m.reset()
 		case key.Matches(msg, m.keymap.Confirm):
 			err := m.save()
-			if err != nil {
-				m.raiseError(err)
-				return m, nil
-			}
+            if err != nil {
+                m.raiseError(err)
+                return m, nil
+            }
 
 			m.popState()
 			return m, tea.Batch(m.reset(), m.pathSelectC.NewStatusMessage("Saved"))
