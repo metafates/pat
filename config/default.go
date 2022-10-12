@@ -20,6 +20,14 @@ Available options are: (from less to most verbose)
 panic, fatal, error, warn, info, debug, trace`,
 	},
 	// END LOGS
+
+	// BACKUP
+	{
+		constant.BackupEnabled,
+		true,
+		"Enable backup",
+	},
+	// END BACKUP
 }
 
 func setDefaults() {

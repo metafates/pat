@@ -6,6 +6,10 @@ const (
 )
 
 const (
+	BackupEnabled = "backup.enabled"
+)
+
+const (
 	FishConfigIntervention = "fish.config.intervention"
 	FishConfigFile         = "fish.config.file"
 )
