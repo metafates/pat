@@ -156,6 +156,8 @@ func (m *Model) reset() tea.Cmd {
 }
 
 func (m *Model) save() (err error) {
+	shell.Backup(m.selectedShell)
+
 	for p, a := range m.onSave {
 		switch a {
 		case actionRemove:

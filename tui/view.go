@@ -13,7 +13,7 @@ func (m *Model) View() string {
 	case statePathSelect:
 		return m.pathSelectC.View()
 	case statePathAdd:
-		return fmt.Sprintf("%t\n\n", m.textInputC.Focused()) + m.textInputC.View()
+		return m.textInputC.View()
 	case stateEntriesPreview:
 		return m.entriesPreviewC.View()
 	case stateConfirmActions:

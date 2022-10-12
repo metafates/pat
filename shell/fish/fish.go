@@ -31,7 +31,7 @@ func (f *Fish) AddPath(path string) error {
 	return f.
 		cmd(
 			fmt.Sprintf(`
-set --universal fish_user_paths $fish_user_paths "%s"
+set --universal fish_user_paths "%s" $fish_user_paths 
 `, path),
 		).
 		Run()
