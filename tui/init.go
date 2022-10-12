@@ -26,5 +26,5 @@ func (m *Model) Init() (cmd tea.Cmd) {
 		)
 	}
 
-	return tea.Batch(cmd, textinput.Blink, m.textInputC.Focus())
+	return tea.Batch(cmd, m.textInputC.Focus(), textinput.Blink)
 }

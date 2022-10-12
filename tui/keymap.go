@@ -7,15 +7,20 @@ import (
 type keymap struct {
 	model *Model
 
+	Preview,
+
+	Select,
 	Confirm,
-	Delete,
+	Remove,
 	Add,
 	Save,
 
 	Back,
 	Reset,
 
-	Quit,
+	MoveUp,
+	MoveDown,
+
 	ForceQuit key.Binding
 }
 
@@ -28,18 +33,17 @@ func (k *keymap) init() {
 		key.WithKeys("ctrl+c"),
 		key.WithHelp("ctrl+c", "Quit the program"),
 	)
-	k.Quit = key.NewBinding(
-		key.WithKeys("q"),
-		key.WithHelp("q", "Quit the program"),
-	)
-
-	k.Confirm = key.NewBinding(
-		key.WithKeys("enter", " "),
+	k.Select = key.NewBinding(
+		key.WithKeys("enter"),
 		key.WithHelp("enter", "Select an item"),
 	)
-	k.Delete = key.NewBinding(
-		key.WithKeys("d"),
-		key.WithHelp("d", "Delete an item"),
+	k.Confirm = key.NewBinding(
+		key.WithKeys("Y"),
+		key.WithHelp("Y", "Confirm"),
+	)
+	k.Remove = key.NewBinding(
+		key.WithKeys("r"),
+		key.WithHelp("r", "Remove an item"),
 	)
 	k.Add = key.NewBinding(
 		key.WithKeys("a"),
@@ -52,6 +56,18 @@ func (k *keymap) init() {
 	k.Reset = key.NewBinding(
 		key.WithKeys("backspace"),
 		key.WithHelp("backspace", "Reset the current list"),
+	)
+	k.MoveUp = key.NewBinding(
+		key.WithKeys("u"),
+		key.WithHelp("u", "Overwrite the selected item with the one above"),
+	)
+	k.MoveDown = key.NewBinding(
+		key.WithKeys("d"),
+		key.WithHelp("d", "Overwrite the selected item with the one below"),
+	)
+	k.Preview = key.NewBinding(
+		key.WithKeys("p"),
+		key.WithHelp("p", "Preview at the selected item"),
 	)
 }
 

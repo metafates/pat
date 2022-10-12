@@ -27,6 +27,12 @@ func Logs() string {
 	return mkdir(filepath.Join(Config(), "logs"))
 }
 
+// Backup path
+// Will create the directory if it doesn't exist
+func Backup() string {
+	return mkdir(filepath.Join(Config(), "backup"))
+}
+
 // Cache path
 // Will create the directory if it doesn't exist
 func Cache() string {

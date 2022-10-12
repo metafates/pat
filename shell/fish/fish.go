@@ -2,9 +2,11 @@ package fish
 
 import (
 	"fmt"
+	"github.com/metafates/pat/log"
 	"github.com/samber/lo"
 	"os/exec"
 	"regexp"
+	"strings"
 )
 
 var fishArrayElementRegex = regexp.MustCompile(`(?m).*?\|(.*?)\|$`)
@@ -16,7 +18,9 @@ func New() *Fish {
 }
 
 func (f *Fish) cmd(code string) *exec.Cmd {
-	return exec.Command(f.Name(), "--command", code)
+	cmd := exec.Command(f.Name(), "--command", code)
+	log.Infof("executing %s", code)
+	return cmd
 }
 
 func (f *Fish) Name() string {
@@ -25,29 +29,39 @@ func (f *Fish) Name() string {
 
 func (f *Fish) AddPath(path string) error {
 	return f.
-		cmd(fmt.Sprintf(`fish_add_path %s`, path)).
-		Run()
-}
-
-func (f *Fish) RemovePath(path string) error {
-	p, err := f.Paths()
-	if err != nil {
-		return err
-	}
-
-	return f.
 		cmd(
 			fmt.Sprintf(`
-if set -l index (contains -i "%s" "%s")
-	set --erase --universal PATH[$index]
-end
-`, path, p),
+set --universal fish_user_paths $fish_user_paths "%s"
+`, path),
 		).
 		Run()
 }
 
+func (f *Fish) RemovePath(path string) error {
+	return f.
+		cmd(
+			fmt.Sprintf(`
+if set -l index (contains -i "%s" $fish_user_paths)
+	set --erase --universal fish_user_paths[$index]
+end
+`, path),
+		).
+		Run()
+}
+
+func (f *Fish) Overwrite(paths []string) error {
+	builder := strings.Builder{}
+
+	for _, p := range paths {
+		builder.WriteString(fmt.Sprintf(`"%s"`, p))
+		builder.WriteString("")
+	}
+
+	return f.cmd("set --universal fish_user_paths " + builder.String()).Run()
+}
+
 func (f *Fish) Paths() ([]string, error) {
-	cmd := f.cmd("set -S PATH")
+	cmd := f.cmd("set -S fish_user_paths")
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, err

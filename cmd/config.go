@@ -245,7 +245,7 @@ func init() {
 
 var configDeleteCmd = &cobra.Command{
 	Use:     "delete",
-	Short:   "Delete the config file",
+	Short:   "Remove the config file",
 	Aliases: []string{"remove"},
 	Run: func(cmd *cobra.Command, args []string) {
 		configFilePath := filepath.Join(where.Config(), fmt.Sprintf("%s.%s", constant.App, constant.ConfigFormat))

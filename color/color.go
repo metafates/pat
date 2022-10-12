@@ -11,6 +11,8 @@ const (
 	Cyan   = lipgloss.Color("6")
 	White  = lipgloss.Color("7")
 	Black  = lipgloss.Color("8")
+
+	Pink = lipgloss.Color("#ff69b4")
 )
 
 const (

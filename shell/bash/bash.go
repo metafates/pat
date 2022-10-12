@@ -17,6 +17,9 @@ func New() *Bash {
 func (b *Bash) AddPath(path string) error    { return nil }
 func (b *Bash) RemovePath(path string) error { return nil }
 func (b *Bash) Paths() ([]string, error)     { return nil, nil }
+func (b *Bash) Overwrite(paths []string) error {
+	return nil
+}
 func (b *Bash) Available() bool {
 	if _, err := exec.LookPath(b.Name()); err != nil {
 		return false

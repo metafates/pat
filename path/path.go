@@ -10,9 +10,12 @@ import (
 )
 
 type Path struct {
-	raw     string
-	size    mo.Option[int64]
-	entries mo.Option[[]*Path]
+	raw          string
+	isDir        mo.Option[bool]
+	isExecutable mo.Option[bool]
+	exists       mo.Option[bool]
+	size         mo.Option[int64]
+	entries      mo.Option[[]*Path]
 }
 
 func (p *Path) String() string {
@@ -20,11 +23,47 @@ func (p *Path) String() string {
 }
 
 func New(path string) *Path {
-	return &Path{
-		raw:     path,
-		size:    mo.None[int64](),
-		entries: mo.None[[]*Path](),
+	var (
+		abs string
+		err error
+	)
+
+	abs, err = filepath.Abs(path)
+	if err != nil {
+		abs = path
 	}
+
+	return &Path{
+		raw:          abs,
+		size:         mo.None[int64](),
+		entries:      mo.None[[]*Path](),
+		exists:       mo.None[bool](),
+		isDir:        mo.None[bool](),
+		isExecutable: mo.None[bool](),
+	}
+}
+
+func (p *Path) IsDir() bool {
+	if p.isDir.IsPresent() {
+		return p.isDir.MustGet()
+	}
+
+	isDir, _ := filesystem.Api().IsDir(p.raw)
+
+	p.isDir = mo.Some(isDir)
+	return isDir
+}
+
+func (p *Path) IsExecutable() bool {
+	if p.isExecutable.IsPresent() {
+		return p.isExecutable.MustGet()
+	}
+
+	stat, _ := filesystem.Api().Stat(p.raw)
+	isExecutable := stat.Mode()&0111 != 0
+
+	p.isExecutable = mo.Some(isExecutable)
+	return isExecutable
 }
 
 func (p *Path) Entries() []*Path {
@@ -46,20 +85,9 @@ func (p *Path) Entries() []*Path {
 			return nil, false
 		}
 
-		// resolve symlinks
-		realPath, err := filepath.EvalSymlinks(info.Name())
-		if err != nil {
-			size += info.Size()
-		} else {
-			realInfo, err := filesystem.Api().Stat(realPath)
-			if err != nil {
-				size += info.Size()
-			} else {
-				size += realInfo.Size()
-			}
-		}
+		size += info.Size()
 
-		return New(info.Name()), true
+		return New(filepath.Join(p.raw, info.Name())), true
 	})
 
 	p.entries = mo.Some(entries)
@@ -68,8 +96,13 @@ func (p *Path) Entries() []*Path {
 }
 
 func (p *Path) Exists() bool {
-	exists, err := filesystem.Api().Exists(p.String())
-	return err == nil && exists
+	if p.exists.IsPresent() {
+		return p.exists.MustGet()
+	}
+
+	exists, _ := filesystem.Api().Exists(p.raw)
+	p.exists = mo.Some(exists)
+	return exists
 }
 
 func (p *Path) Size() int64 {
@@ -77,7 +110,7 @@ func (p *Path) Size() int64 {
 		return p.size.MustGet()
 	}
 
-	info, err := filesystem.Api().Stat(p.String())
+	info, err := filesystem.Api().Stat(p.raw)
 	if err != nil {
 		return 0
 	}

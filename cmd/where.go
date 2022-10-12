@@ -13,6 +13,7 @@ import (
 )
 
 var wherePaths = []lo.Tuple2[string, func() string]{
+	{"backup", where.Backup},
 	{"config", where.Config},
 	{"logs", where.Logs},
 }

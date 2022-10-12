@@ -13,6 +13,7 @@ type Shell interface {
 	Name() string
 	AddPath(path string) error
 	RemovePath(path string) error
+	Overwrite(paths []string) error
 	Paths() ([]string, error)
 	Available() bool
 }

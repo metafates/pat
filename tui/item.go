@@ -9,7 +9,9 @@ import (
 	"github.com/metafates/pat/shell"
 	"github.com/metafates/pat/util"
 	"github.com/samber/lo"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -25,9 +27,11 @@ func (m *Model) newItem(internal any) *item {
 func (i *item) marked() (markIcon string, marked bool) {
 	switch x := i.internal.(type) {
 	case shell.Shell:
-		return "✓", x == i.model.selectedShell
+		marked = lo.Must(exec.LookPath(x.Name())) == filepath.Clean(os.Getenv("SHELL"))
+		markIcon = lipgloss.NewStyle().Foreground(color.Pink).Render(icon.Heart)
+		return
 	case *path.Path:
-		pathAction, ok := i.model.onSave[x.String()]
+		pathAction, ok := i.model.getAction(x)
 		if !ok {
 			return
 		}
@@ -35,7 +39,7 @@ func (i *item) marked() (markIcon string, marked bool) {
 		switch pathAction {
 		case actionAdd:
 			return lipgloss.NewStyle().Foreground(color.Green).Render(icon.Check), true
-		case actionDelete:
+		case actionRemove:
 			return lipgloss.NewStyle().Foreground(color.Red).Render(icon.Cross), true
 		default:
 			return
@@ -50,7 +54,11 @@ func (i *item) FilterValue() string {
 	case shell.Shell:
 		return i.Name()
 	case *path.Path:
-		return i.String()
+		if i.IsDir() || !i.Exists() {
+			return i.String()
+		}
+
+		return filepath.Base(i.String())
 	default:
 		panic("unknown type")
 	}
@@ -82,10 +90,18 @@ func (i *item) Description() string {
 			return "Nonexistent"
 		}
 
-		entries := util.Quantify(len(i.Entries()), "entry", "entries")
-		size := i.SizeHuman()
+		if i.IsDir() {
+			entries := util.Quantify(len(i.Entries()), "entry", "entries")
+			size := i.SizeHuman()
 
-		return fmt.Sprintf("%s, %s", entries, size)
+			return fmt.Sprintf("%s, %s", entries, size)
+		}
+
+		if !i.IsExecutable() {
+			return fmt.Sprintf("%s, Nonexecutable", i.SizeHuman())
+		}
+
+		return i.SizeHuman()
 	default:
 		panic("unknown type")
 	}

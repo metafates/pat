@@ -17,6 +17,9 @@ func New() *Zsh {
 func (z *Zsh) AddPath(path string) error    { return nil }
 func (z *Zsh) RemovePath(path string) error { return nil }
 func (z *Zsh) Paths() ([]string, error)     { return nil, nil }
+func (z *Zsh) Overwrite(paths []string) error {
+	return nil
+}
 func (z *Zsh) Available() bool {
 	if _, err := exec.LookPath(z.Name()); err != nil {
 		return false
