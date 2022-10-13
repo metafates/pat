@@ -2,9 +2,11 @@ package fish
 
 import (
 	"fmt"
-	"github.com/metafates/pat/log"
-	"github.com/samber/lo"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/filesystem"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -17,61 +19,104 @@ func New() *Fish {
 	return &Fish{}
 }
 
-func (f *Fish) cmd(code string) *exec.Cmd {
-	cmd := exec.Command(f.Name(), "--command", code)
-	log.Infof("executing %s", code)
-	return cmd
-}
-
 func (f *Fish) Name() string {
 	return "fish"
 }
 
+func (f *Fish) cmd(code string) *exec.Cmd {
+	return exec.Command(f.Name(), "-c", code)
+}
+
+func (f *Fish) writeFile(content string) error {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf(".%s.%s", constant.App, f.Name())
+	file, err := filesystem.Api().OpenFile(filepath.Join(home, filename), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	content = fmt.Sprintf(`set -g PATH
+
+%s
+
+set -x PATH $PATH`, content)
+
+	_, err = file.WriteString(content)
+	return err
+}
+
+func (f *Fish) makeExport(path string) string {
+	return fmt.Sprintf(`set -a PATH "%s"
+`, path)
+}
+
 func (f *Fish) AddPath(path string) error {
-	return f.
-		cmd(
-			fmt.Sprintf(`
-set --universal fish_user_paths "%s" $fish_user_paths 
-`, path),
-		).
-		Run()
+	builder := strings.Builder{}
+
+	paths, err := f.Paths()
+	if err != nil {
+		return err
+	}
+
+	builder.WriteString(f.makeExport(path))
+	for _, p := range paths {
+		builder.WriteString(f.makeExport(p))
+	}
+
+	return f.writeFile(builder.String())
 }
 
 func (f *Fish) RemovePath(path string) error {
-	return f.
-		cmd(
-			fmt.Sprintf(`
-if set -l index (contains -i "%s" $fish_user_paths)
-	set --erase --universal fish_user_paths[$index]
-end
-`, path),
-		).
-		Run()
+	builder := strings.Builder{}
+
+	paths, err := f.Paths()
+	if err != nil {
+		return err
+	}
+
+	for _, p := range paths {
+		if p == path {
+			continue
+		}
+
+		builder.WriteString(f.makeExport(p))
+	}
+
+	return f.writeFile(builder.String())
+}
+
+func (f *Fish) Paths() ([]string, error) {
+	cmd := f.cmd("set -S PATH")
+	out, err := cmd.Output()
+
+	if err != nil {
+		return nil, err
+	}
+
+	matched := fishArrayElementRegex.FindAllStringSubmatch(string(out), -1)
+	paths := make([]string, len(matched))
+
+	for i, m := range matched {
+		paths[i] = m[1]
+	}
+
+	return paths, nil
 }
 
 func (f *Fish) Overwrite(paths []string) error {
 	builder := strings.Builder{}
 
 	for _, p := range paths {
-		builder.WriteString(fmt.Sprintf(`"%s"`, p))
-		builder.WriteString(" ")
+		builder.WriteString(f.makeExport(p))
 	}
 
-	return f.cmd("set --universal fish_user_paths " + builder.String()).Run()
-}
-
-func (f *Fish) Paths() ([]string, error) {
-	cmd := f.cmd("set -S fish_user_paths")
-	out, err := cmd.Output()
-	if err != nil {
-		return nil, err
-	}
-
-	paths := fishArrayElementRegex.FindAllStringSubmatch(string(out), -1)
-
-	return lo.Map(paths, func(p []string, _ int) string {
-		return p[1]
-	}), nil
+	return f.writeFile(builder.String())
 }
 
 func (f *Fish) Available() bool {

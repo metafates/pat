@@ -22,7 +22,7 @@ func New() *Zsh {
 }
 
 func (z *Zsh) cmd(code string) *exec.Cmd {
-	return exec.Command("zsh", "-c", code)
+	return exec.Command(z.Name(), "-c", code)
 }
 
 func (z *Zsh) writeFile(content string) error {
