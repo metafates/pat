@@ -82,7 +82,7 @@ echo "source $(pat where --fish) &>/dev/null" >> ~/.config/fish/config.fish
 
 For **Bash**
 ```bash
-echo "source $(path where --bash) &>/dev/null" >> ~/.bashrc
+echo "source $(pat where --bash) &>/dev/null" >> ~/.bashrc
 ```
 
 ## Installation
