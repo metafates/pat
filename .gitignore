@@ -1,3 +1,5 @@
+# Since we use on the fly config generation
+.goreleaser.yaml
 
 #########
 # macOS #

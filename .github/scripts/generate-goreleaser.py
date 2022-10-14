@@ -1,4 +1,17 @@
+import pathlib as pl
 
+APP = "pat"
+DESC = "The $PATH manager"
+
+OUT = ".goreleaser.yaml"
+
+# get script path
+script_path = pl.Path(__file__).resolve()
+
+# get project root (3 levels up)
+project_root = script_path.parent.parent.parent
+
+goreleaser_yaml = f'''
 before:
   hooks:
     - go mod tidy
@@ -42,23 +55,23 @@ checksum:
   name_template: 'checksums.txt'
 
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  name_template: "{{{{ incpatch .Version }}}}-next"
 
 changelog:
   sort: asc
   use: github
   groups:
     - title: Dependency updates
-      regexp: "^.*feat\(deps\)*:+.*$"
+      regexp: "^.*feat\\(deps\\)*:+.*$"
       order: 300
     - title: 'New Features'
-      regexp: "^.*feat[(\w)]*:+.*$"
+      regexp: "^.*feat[(\\w)]*:+.*$"
       order: 100
     - title: 'Bug fixes'
-      regexp: "^.*fix[(\w)]*:+.*$"
+      regexp: "^.*fix[(\\w)]*:+.*$"
       order: 200
     - title: 'Documentation updates'
-      regexp: "^.*docs[(\w)]*:+.*$"
+      regexp: "^.*docs[(\\w)]*:+.*$"
       order: 400
     - title: Other work
       order: 9999
@@ -75,39 +88,39 @@ changelog:
       - go mod tidy
 
 brews:
-  - name: pat
+  - name: {APP}
 
     tap:
       owner: metafates
-      name: homebrew-pat
+      name: homebrew-{APP}
       branch: main
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+      token: "{{{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}}}"
 
     commit_author:
       name: goreleaserbot
       email: bot@goreleaser.com
 
-    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-    homepage: "https://github.com/metafates/pat"
-    description: "The $PATH manager"
+    commit_msg_template: "Brew formula update for {{{{ .ProjectName }}}} version {{{{ .Tag }}}}"
+    homepage: "https://github.com/metafates/{APP}"
+    description: "{DESC}"
     license: "MIT"
     skip_upload: false
 
     test: |
-      system "#{bin}/pat -v"
+      system "#{{bin}}/{APP} -v"
 
     install: |-
-      bin.install "mangal"
-      bash_completion.install "completions/pat.bash" => "pat"
-      zsh_completion.install "completions/pat.zsh" => "_pat"
-      fish_completion.install "completions/pat.fish"
+      bin.install "{APP}"
+      bash_completion.install "completions/{APP}.bash" => "{APP}"
+      zsh_completion.install "completions/{APP}.zsh" => "_{APP}"
+      fish_completion.install "completions/{APP}.fish"
 
 scoop:
   bucket:
     owner: metafates
     name: scoop-metafates
     branch: main
-    token: "{{ .Env.SCOOP_TAP_GITHUB_TOKEN }}"
+    token: "{{{{ .Env.SCOOP_TAP_GITHUB_TOKEN }}}}"
 
   folder: bucket
 
@@ -115,9 +128,9 @@ scoop:
     name: goreleaserbot
     email: bot@goreleaser.com
 
-  commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
-  homepage: "https://github.com/metafates/pat"
-  description: "The $PATH manager"
+  commit_msg_template: "Scoop update for {{{{ .ProjectName }}}} version {{{{ .Tag }}}}"
+  homepage: "https://github.com/metafates/{APP}"
+  description: "{DESC}"
   license: MIT
   skip_upload: false
 
@@ -125,31 +138,31 @@ scoop:
 release:
   github:
     owner: metafates
-    name: mangal
+    name: {APP}
 
-  name_template: "{{.ProjectName}} v{{.Version}}"
+  name_template: "{{{{.ProjectName}}}} v{{{{.Version}}}}"
   header: |
     To install:
     ```sh
-    curl -sSL pat.metafates.one/install | sh
+    curl -sSL {APP}.metafates.one/install | sh
     ```
 
     ## What's new?
 
   footer: |
 
-    **Full Changelog**: https://github.com/metafates/pat/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/metafates/{APP}/compare/{{{{ .PreviousTag }}}}...{{{{ .Tag }}}}
 
     ---
 
-    Bugs? Suggestions? [Open an issue](https://github.com/metafates/pat/issues/new/choose)
+    Bugs? Suggestions? [Open an issue](https://github.com/metafates/{APP}/issues/new/choose)
 
 nfpms:
-  - file_name_template: "{{ .ConventionalFileName }}"
-    homepage: https://github.com/metafates/pat
+  - file_name_template: "{{{{ .ConventionalFileName }}}}"
+    homepage: https://github.com/metafates/{APP}
     maintainer: metafates <fates@duck.com>
     description: |-
-The $PATH manager 
+{DESC} 
 
     license: MIT
     formats:
@@ -165,19 +178,23 @@ The $PATH manager
         - changelog-file-missing-in-native-package
 
     contents:
-      - src: ./completions/pat.bash
-        dst: /usr/share/bash-completion/completions/pat
+      - src: ./completions/{APP}.bash
+        dst: /usr/share/bash-completion/completions/{APP}
         file_info:
           mode: 0644
-      - src: ./completions/pat.fish
-        dst: /usr/share/fish/completions/pat.fish
+      - src: ./completions/{APP}.fish
+        dst: /usr/share/fish/completions/{APP}.fish
         file_info:
           mode: 0644
-      - src: ./completions/pat.zsh
-        dst: /usr/share/zsh/vendor-completions/_pat
+      - src: ./completions/{APP}.zsh
+        dst: /usr/share/zsh/vendor-completions/_{APP}
         file_info:
           mode: 0644
       - src: ./LICENSE
-        dst: /usr/share/doc/pat/copyright
+        dst: /usr/share/doc/{APP}/copyright
         file_info:
           mode: 0644
+'''
+
+with open(pl.Path(project_root, OUT), "w") as file:
+    file.write(goreleaser_yaml)

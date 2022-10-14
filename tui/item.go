@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"fmt"
 	"github.com/atotto/clipboard"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/metafates/pat/color"
@@ -85,18 +84,22 @@ func (i *item) Description() string {
 	case *shell.Wrapper:
 		return lo.Must(i.BinPath())
 	case *path.Path:
-		if !i.Exists() {
-			return "Nonexistent"
-		}
+		builder := strings.Builder{}
 
 		if i.IsDir() {
-			entries := util.Quantify(len(i.Executables()), "executable", "executables")
-			size := i.SizeHuman()
-
-			return fmt.Sprintf("%s, %s", entries, size)
+			builder.WriteString(util.Quantify(len(i.Executables()), "executable", "executables"))
+			builder.WriteString(", ")
+			builder.WriteString(i.SizeHuman())
+		} else {
+			builder.WriteString(i.SizeHuman())
 		}
 
-		return i.SizeHuman()
+		if i.IsSymLink() {
+			builder.WriteString(", ")
+			builder.WriteString("symlink")
+		}
+
+		return builder.String()
 	default:
 		panic("unknown type")
 	}

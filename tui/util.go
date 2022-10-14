@@ -67,7 +67,11 @@ func (m *Model) pathInfo(p string) (info string) {
 			closest := util.FindClosest(filepath.Base(p), dirs)
 			if closest.IsPresent() {
 				completion := filepath.Join(dir, closest.MustGet())
-				info = lipgloss.NewStyle().Foreground(color.Yellow).Render("Did you mean " + completion + "?")
+				info = lipgloss.
+					NewStyle().
+					Foreground(color.Yellow).
+					Render(fmt.Sprintf("Did you mean %s?", completion))
+				info += lipgloss.NewStyle().Faint(true).Render(fmt.Sprintf(" Press %s to complete", m.keymap.AcceptCompletion.Help().Key))
 				m.toComplete = mo.Some(completion)
 			} else {
 				info = lipgloss.NewStyle().Foreground(color.Red).Render("Path does not exist")
