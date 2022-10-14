@@ -6,7 +6,7 @@ const (
 	stateShellSelect state = iota
 	statePathSelect
 	statePathAdd
-	stateEntriesPreview
+	stateExecutablesPreview
 	stateConfirmActions
 	stateError
 )

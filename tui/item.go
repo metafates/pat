@@ -27,7 +27,7 @@ func (i *item) marked() (markIcon string, marked bool) {
 	switch x := i.internal.(type) {
 	case *shell.Wrapper:
 		marked = x.IsDefault()
-		markIcon = lipgloss.NewStyle().Faint(true).Render("Default")
+		markIcon = lipgloss.NewStyle().Faint(true).Render("default $SHELL")
 		return
 	case *path.Path:
 		pathAction, ok := i.model.getAction(x)
@@ -37,7 +37,7 @@ func (i *item) marked() (markIcon string, marked bool) {
 
 		switch pathAction {
 		case actionAdd:
-			return lipgloss.NewStyle().Foreground(color.Green).Render(icon.Check), true
+			return lipgloss.NewStyle().Foreground(color.Green).Bold(true).Render(icon.Plus), true
 		case actionRemove:
 			return lipgloss.NewStyle().Foreground(color.Red).Render(icon.Cross), true
 		default:
@@ -90,14 +90,10 @@ func (i *item) Description() string {
 		}
 
 		if i.IsDir() {
-			entries := util.Quantify(len(i.Entries()), "entry", "entries")
+			entries := util.Quantify(len(i.Executables()), "executable", "executables")
 			size := i.SizeHuman()
 
 			return fmt.Sprintf("%s, %s", entries, size)
-		}
-
-		if !i.IsExecutable() {
-			return fmt.Sprintf("%s, Nonexecutable", i.SizeHuman())
 		}
 
 		return i.SizeHuman()

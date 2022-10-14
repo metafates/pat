@@ -29,14 +29,14 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch m.state {
 			case statePathAdd:
 				m.textInputC.SetValue("")
-			case stateEntriesPreview:
-				if m.entriesPreviewC.FilterState() != list.Unfiltered {
-					model, cmd := m.entriesPreviewC.Update(msg)
-					m.entriesPreviewC = &model
+			case stateExecutablesPreview:
+				if m.executablesPreviewC.FilterState() != list.Unfiltered {
+					model, cmd := m.executablesPreviewC.Update(msg)
+					m.executablesPreviewC = &model
 					return m, cmd
 				}
 
-				cmd = onListBack(m.entriesPreviewC)
+				cmd = onListBack(m.executablesPreviewC)
 			case statePathSelect:
 				if m.pathSelectC.FilterState() != list.Unfiltered {
 					model, cmd := m.pathSelectC.Update(msg)
@@ -62,8 +62,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m.updatePathSelect(msg)
 	case statePathAdd:
 		return m.updatePathAdd(msg)
-	case stateEntriesPreview:
-		return m.updateEntriesPreview(msg)
+	case stateExecutablesPreview:
+		return m.updateExecutablesPreview(msg)
 	case stateConfirmActions:
 		return m.updateConfirmActions(msg)
 	}
@@ -174,9 +174,9 @@ func (m *Model) updatePathSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
-			m.pushState(stateEntriesPreview)
-			return m, m.entriesPreviewC.SetItems(
-				lo.Map(p.Entries(), func(e *path.Path, _ int) list.Item {
+			m.pushState(stateExecutablesPreview)
+			return m, m.executablesPreviewC.SetItems(
+				lo.Map(p.Executables(), func(e *path.Path, _ int) list.Item {
 					return m.newItem(e)
 				}),
 			)
@@ -222,7 +222,7 @@ func (m *Model) updatePathSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *Model) updateEntriesPreview(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) updateExecutablesPreview(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
@@ -232,8 +232,8 @@ func (m *Model) updateEntriesPreview(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	model, cmd := m.entriesPreviewC.Update(msg)
-	m.entriesPreviewC = &model
+	model, cmd := m.executablesPreviewC.Update(msg)
+	m.executablesPreviewC = &model
 	return m, cmd
 }
 

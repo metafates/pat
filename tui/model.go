@@ -41,11 +41,11 @@ type Model struct {
 
 	err error
 
-	pathSelectC     *list.Model
-	shellSelectC    *list.Model
-	entriesPreviewC *list.Model
-	textInputC      *textinput.Model
-	helpC           *help.Model
+	pathSelectC         *list.Model
+	shellSelectC        *list.Model
+	executablesPreviewC *list.Model
+	textInputC          *textinput.Model
+	helpC               *help.Model
 
 	toComplete mo.Option[string]
 }
@@ -112,7 +112,7 @@ func NewModel() *Model {
 	model.shellSelectC = newList("Select Shell", "shell", "shells")
 	model.shellSelectC.SetFilteringEnabled(false)
 
-	model.entriesPreviewC = newList("Preview", "entry", "entries")
+	model.executablesPreviewC = newList("Preview", "executable", "executables")
 	model.textInputC = newTextInput()
 
 	model.helpC = newHelp()
@@ -130,7 +130,7 @@ func (m *Model) resize(width, height int) {
 
 	m.shellSelectC.SetSize(width, height)
 	m.pathSelectC.SetSize(width, height)
-	m.entriesPreviewC.SetSize(width, height)
+	m.executablesPreviewC.SetSize(width, height)
 
 	m.textInputC.Width = width
 	m.helpC.Width = width

@@ -16,8 +16,8 @@ func (m *Model) View() string {
 		return m.styles.ListPadding.Render(m.shellSelectC.View())
 	case statePathSelect:
 		return m.styles.ListPadding.Render(m.pathSelectC.View())
-	case stateEntriesPreview:
-		return m.styles.ListPadding.Render(m.entriesPreviewC.View())
+	case stateExecutablesPreview:
+		return m.styles.ListPadding.Render(m.executablesPreviewC.View())
 	case statePathAdd:
 		return m.viewPathAdd()
 	case stateConfirmActions:
@@ -69,8 +69,9 @@ func (m *Model) viewConfirmActions() string {
 		lines = append(lines, lipgloss.NewStyle().Foreground(color.Yellow).Render("Order will be changed"))
 	}
 
-	if len(lines) == 0 {
-		lines = append(lines, "Nothing to do")
+	// 2 for title and empty line
+	if len(lines) <= 2 {
+		lines = append(lines, "Nothing to do ¯\\_(ツ)_/¯")
 	}
 
 	return m.renderLines(true, lines...)

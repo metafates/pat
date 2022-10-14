@@ -18,7 +18,7 @@ func (m *Model) pathInfo(p string) (info string) {
 
 	isAbs := filepath.IsAbs(p)
 	if !isAbs {
-		info = lipgloss.NewStyle().Foreground(color.Yellow).Render("Path must be absolute")
+		info = lipgloss.NewStyle().Foreground(color.Yellow).Render("Path is not absolute")
 		return
 	}
 
@@ -28,7 +28,7 @@ func (m *Model) pathInfo(p string) (info string) {
 		isDir, _ := filesystem.Api().IsDir(p)
 		if isDir {
 			p := path.New(p)
-			info = lipgloss.NewStyle().Foreground(color.Green).Render(fmt.Sprintf("Path exists, %s", util.Quantify(len(p.Entries()), "entry", "entries")))
+			info = lipgloss.NewStyle().Foreground(color.Green).Render(fmt.Sprintf("Path exists, %s", util.Quantify(len(p.Executables()), "executable", "executables")))
 		} else {
 			info = lipgloss.NewStyle().Foreground(color.Red).Render("Path exists but it's not a directory")
 		}

@@ -42,7 +42,7 @@ func (k *keymap) ShortHelp() []key.Binding {
 		s := k.Select
 		s.SetHelp("enter", "add the current path")
 		return []key.Binding{s, k.AcceptCompletion, k.Back}
-	case stateEntriesPreview:
+	case stateExecutablesPreview:
 		return []key.Binding{k.Back}
 	default:
 		return nil
@@ -79,7 +79,7 @@ func (k *keymap) init() {
 		key.WithHelp("r", "remove"),
 	)
 	k.Copy = key.NewBinding(
-		key.WithKeys("c"),
+		key.WithKeys("c", "y"),
 		key.WithHelp("c", "copy"),
 	)
 	k.Add = key.NewBinding(
