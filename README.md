@@ -17,7 +17,8 @@ Okay, let's move on!
 
 ## How to use?
 
-Let's assume you're a *[Zsh](https://en.wikipedia.org/wiki/Z_shell) user and want to add `~/playground/scripts` to your `$PATH`. *though, fish and bash are also supported, it's just an example*
+Let's assume you're a [ZSH](https://en.wikipedia.org/wiki/Z_shell) user and want to add `~/playground/scripts` to your `$PATH`.
+> fish and bash are also supported, it's just an example
 
 No need for any extra arguments or preconfiguration just run
 ```shell
