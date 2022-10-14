@@ -91,7 +91,7 @@ echo "source $(pat where --bash) &>/dev/null" >> ~/.bashrc
 
 With `curl`
 ```shell
-curl -sfFL pat.metafates.one/install | sh
+curl -sSL pat.metafates.one/install | sh
 ```
 
 With `wget`
