@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -16,7 +17,15 @@ import (
 	"time"
 )
 
+type Styles struct {
+	Padding     lipgloss.Style
+	ListPadding lipgloss.Style
+	Title       lipgloss.Style
+}
+
 type Model struct {
+	styles *Styles
+
 	statesHistory *stack.Stack[state]
 	state         state
 
@@ -36,16 +45,25 @@ type Model struct {
 	shellSelectC    *list.Model
 	entriesPreviewC *list.Model
 	textInputC      *textinput.Model
+	helpC           *help.Model
 }
 
 func NewModel() *Model {
+	styles := &Styles{
+		Padding: lipgloss.NewStyle().Padding(1, 2),
+		Title:   lipgloss.NewStyle().Padding(0, 1).Background(color.New("62")).Foreground(color.New("230")),
+	}
+	styles.ListPadding = lipgloss.NewStyle().Padding(styles.Padding.GetPaddingTop(), styles.Padding.GetPaddingBottom(), 1, 0)
+
 	model := &Model{
 		keymap:        &keymap{},
 		shells:        shell.AvailableShells(),
 		statesHistory: stack.New[state](),
 		onSave:        make(map[string]action),
 		order:         mo.None[[]string](),
+		styles:        styles,
 	}
+	model.keymap.model = model
 	model.keymap.init()
 
 	defer func() {
@@ -72,12 +90,18 @@ func NewModel() *Model {
 		l.AdditionalShortHelpKeys = model.keymap.AdditionalShortHelpKeys
 		l.AdditionalFullHelpKeys = model.keymap.AdditionalFullHelpKeys
 		l.StatusMessageLifetime = time.Second * 3
+		l.Styles.NoItems = model.styles.Padding
 		return &l
 	}
 
 	newTextInput := func() *textinput.Model {
 		t := textinput.New()
 		return &t
+	}
+
+	newHelp := func() *help.Model {
+		h := help.New()
+		return &h
 	}
 
 	model.pathSelectC = newList("Paths", "path", "paths")
@@ -89,23 +113,25 @@ func NewModel() *Model {
 	model.entriesPreviewC = newList("Preview", "entry", "entries")
 	model.textInputC = newTextInput()
 
+	model.helpC = newHelp()
+
 	return model
 }
 
 func (m *Model) resize(width, height int) {
-	m.ttyWidth = width
-	m.ttyHeight = height
+	pX, pY := m.styles.Padding.GetFrameSize()
+	lX, lY := m.styles.ListPadding.GetFrameSize()
 
-	m.shellSelectC.SetWidth(width)
-	m.shellSelectC.SetHeight(height)
+	m.ttyWidth, m.ttyHeight = width-pX, height-pY
 
-	m.pathSelectC.SetWidth(width)
-	m.pathSelectC.SetHeight(height)
+	width, height = width-lX, height-lY
 
-	m.entriesPreviewC.SetWidth(width)
-	m.entriesPreviewC.SetHeight(height)
+	m.shellSelectC.SetSize(width, height)
+	m.pathSelectC.SetSize(width, height)
+	m.entriesPreviewC.SetSize(width, height)
 
 	m.textInputC.Width = width
+	m.helpC.Width = width
 }
 
 func (m *Model) pushState(s state) {

@@ -26,7 +26,7 @@ panic, fatal, error, warn, info, debug, trace`,
 	{
 		constant.BackupEnabled,
 		true,
-		"Enable backup",
+		"Enable backups",
 	},
 	// END BACKUP
 
@@ -34,7 +34,8 @@ panic, fatal, error, warn, info, debug, trace`,
 	{
 		constant.FishScriptPath,
 		util.ResolveTilde("~"),
-		"Fish script path",
+		`Fish script path
+You can use ~ to represent your home directory`,
 	},
 	// END FISH
 
@@ -42,7 +43,8 @@ panic, fatal, error, warn, info, debug, trace`,
 	{
 		constant.ZshScriptPath,
 		util.ResolveTilde("~"),
-		"Zsh script path",
+		`Zsh script path
+You can use ~ to represent your home directory`,
 	},
 	// END ZSH
 
@@ -50,7 +52,8 @@ panic, fatal, error, warn, info, debug, trace`,
 	{
 		constant.BashScriptPath,
 		util.ResolveTilde("~"),
-		"Bash script path",
+		`Bash script path
+You can use ~ to represent your home directory`,
 	},
 	// END BASH
 }

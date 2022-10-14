@@ -115,7 +115,7 @@ func (m *Model) updatePathSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch {
 		case key.Matches(msg, m.keymap.Reset):
 			return m, m.reset()
-		case key.Matches(msg, m.keymap.Select):
+		case key.Matches(msg, m.keymap.Save, m.keymap.Select):
 			m.pushState(stateConfirmActions)
 			return m, nil
 		case key.Matches(msg, m.keymap.Add):
@@ -205,6 +205,14 @@ func (m *Model) updatePathSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 			return m, nil
+		case key.Matches(msg, m.keymap.Copy):
+			item, ok := m.pathSelectC.SelectedItem().(*item)
+			if !ok {
+				return m, nil
+			}
+
+			item.Copy()
+			return m, m.pathSelectC.NewStatusMessage("Copied to clipboard")
 		}
 	}
 

@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"github.com/atotto/clipboard"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/metafates/pat/color"
 	"github.com/metafates/pat/icon"
@@ -103,4 +104,8 @@ func (i *item) Description() string {
 	default:
 		panic("unknown type")
 	}
+}
+
+func (i *item) Copy() {
+	_ = clipboard.WriteAll(i.FilterValue())
 }
