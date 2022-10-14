@@ -62,11 +62,7 @@ accidentally
 
 ```sh
 echo "source $(pat where --zsh) &>/dev/null" >> ~/.zshenv
-```
-
-```zsh
-# This line should be the last one in your ~/.zshenv
-source $(pat where --zsh) &>/dev/null
+source ~/.zshenv
 ```
 
 For any other shell steps are the same, except for the last one
@@ -75,11 +71,11 @@ For **Fish**
 ```fish
 # If you know what you're doing, you can change config.fish to other file of course
 echo "source $(pat where --fish) &>/dev/null" >> ~/.config/fish/config.fish
+source ~/.config/fish/config.fish
 ```
 
 For **Bash**
 ```bash
-echo "source $(path where --bash) &>/dev/null" >> ~/.profile
+echo "source $(path where --bash) &>/dev/null" >> ~/.bashrc
+source ~/.bashrc
 ```
-
-
