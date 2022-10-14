@@ -2,6 +2,8 @@ package bash
 
 import (
 	"fmt"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/where"
 	"github.com/samber/lo"
 	"os/exec"
 	"strings"
@@ -9,8 +11,12 @@ import (
 
 type Bash struct{}
 
+func (b *Bash) WhereScript() string {
+	return where.BashScript()
+}
+
 func (b *Bash) Bin() string {
-	return "bash"
+	return constant.Bash
 }
 
 func (b *Bash) CommentToken() string {

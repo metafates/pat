@@ -8,3 +8,15 @@ const (
 const (
 	BackupEnabled = "backup.enabled"
 )
+
+const (
+	FishScriptPath = "fish.script_path"
+)
+
+const (
+	ZshScriptPath = "zsh.script_path"
+)
+
+const (
+	BashScriptPath = "bash.script_path"
+)

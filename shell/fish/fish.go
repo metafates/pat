@@ -2,6 +2,8 @@ package fish
 
 import (
 	"fmt"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/where"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -10,6 +12,10 @@ import (
 var fishArrayElementRegex = regexp.MustCompile(`(?m).*?\|(.*?)\|$`)
 
 type Fish struct{}
+
+func (f *Fish) WhereScript() string {
+	return where.FishScript()
+}
 
 func (f *Fish) CommentToken() string {
 	return "#"
@@ -24,7 +30,7 @@ func (f *Fish) Name() string {
 }
 
 func (f *Fish) Bin() string {
-	return "fish"
+	return constant.Fish
 }
 
 func (f *Fish) cmd(code string) *exec.Cmd {

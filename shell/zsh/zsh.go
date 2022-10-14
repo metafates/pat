@@ -2,6 +2,8 @@ package zsh
 
 import (
 	"fmt"
+	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/where"
 	"github.com/samber/lo"
 	"os/exec"
 	"strings"
@@ -9,8 +11,12 @@ import (
 
 type Zsh struct{}
 
+func (z *Zsh) WhereScript() string {
+	return where.ZshScript()
+}
+
 func (z *Zsh) Bin() string {
-	return "zsh"
+	return constant.Zsh
 }
 
 func (z *Zsh) CommentToken() string {

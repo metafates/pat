@@ -4,7 +4,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/metafates/pat/color"
 	"github.com/metafates/pat/constant"
-	"github.com/metafates/pat/util"
 	"github.com/metafates/pat/where"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
@@ -12,15 +11,27 @@ import (
 	"strings"
 )
 
-var wherePaths = []lo.Tuple2[string, func() string]{
-	{"backup", where.Backup},
-	{"config", where.Config},
-	{"logs", where.Logs},
+type whereTarget struct {
+	Name     string
+	ArgShort string
+	ArgFull  string
+	Where    func() string
+}
+
+var wherePaths = []whereTarget{
+	{"Zsh Script", "", "zsh", where.ZshScript},
+	{"Fish Script", "", "fish", where.FishScript},
+	{"Bash Script", "", "bash", where.BashScript},
+
+	{"Backup", "b", "backup", where.Backup},
+	{"Config", "c", "config", where.Config},
+	{"Logs", "l", "logs", where.Logs},
 }
 
 func init() {
 	for _, p := range wherePaths {
-		p.A = strings.ToLower(p.A)
+		p.ArgFull = strings.ToLower(p.ArgFull)
+		p.ArgShort = strings.ToLower(p.ArgShort)
 	}
 }
 
@@ -28,11 +39,15 @@ func init() {
 	rootCmd.AddCommand(whereCmd)
 
 	for _, n := range wherePaths {
-		whereCmd.Flags().BoolP(n.A, string(n.A[0]), false, n.A+" path")
+		if n.ArgShort != "" {
+			whereCmd.Flags().BoolP(n.ArgFull, n.ArgShort, false, n.Name+" path")
+		} else {
+			whereCmd.Flags().Bool(n.ArgFull, false, n.Name+" path")
+		}
 	}
 
-	whereCmd.MarkFlagsMutuallyExclusive(lo.Map(wherePaths, func(t lo.Tuple2[string, func() string], _ int) string {
-		return t.A
+	whereCmd.MarkFlagsMutuallyExclusive(lo.Map(wherePaths, func(t whereTarget, _ int) string {
+		return t.ArgFull
 	})...)
 
 	whereCmd.SetOut(os.Stdout)
@@ -46,15 +61,15 @@ var whereCmd = &cobra.Command{
 		yellowStyle := lipgloss.NewStyle().Foreground(color.Yellow).Render
 
 		for _, n := range wherePaths {
-			if lo.Must(cmd.Flags().GetBool(n.A)) {
-				cmd.Println(n.B())
+			if lo.Must(cmd.Flags().GetBool(n.ArgFull)) {
+				cmd.Println(n.Where())
 				return
 			}
 		}
 
 		for i, n := range wherePaths {
-			cmd.Printf("%s %s\n", headerStyle(util.Capitalize(n.A)+"?"), yellowStyle("--"+n.A))
-			cmd.Println(n.B())
+			cmd.Printf("%s %s\n", headerStyle(n.Name+"?"), yellowStyle("--"+n.ArgFull))
+			cmd.Println(n.Where())
 
 			if i < len(wherePaths)-1 {
 				cmd.Println()

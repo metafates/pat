@@ -11,6 +11,7 @@ import (
 type instance interface {
 	Name() string
 	Bin() string
+	WhereScript() string
 	CommentToken() string
 	GenerateExport(paths []string) (script string)
 	Paths() ([]string, error)

@@ -1,8 +1,11 @@
 package where
 
 import (
+	"fmt"
 	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/util"
 	"github.com/samber/lo"
+	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
 )
@@ -50,4 +53,19 @@ func Cache() string {
 func Temp() string {
 	tempDir := filepath.Join(os.TempDir(), constant.PrefixTemp)
 	return mkdir(tempDir)
+}
+
+func FishScript() string {
+	dir := mkdir(util.ResolveTilde(viper.GetString(constant.FishScriptPath)))
+	return filepath.Join(dir, fmt.Sprintf(".%s.%s", constant.App, constant.Fish))
+}
+
+func ZshScript() string {
+	dir := mkdir(util.ResolveTilde(viper.GetString(constant.ZshScriptPath)))
+	return filepath.Join(dir, fmt.Sprintf(".%s.%s", constant.App, constant.Zsh))
+}
+
+func BashScript() string {
+	dir := mkdir(util.ResolveTilde(viper.GetString(constant.BashScriptPath)))
+	return filepath.Join(dir, fmt.Sprintf(".%s.%s", constant.App, constant.Bash))
 }

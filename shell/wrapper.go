@@ -1,7 +1,6 @@
 package shell
 
 import (
-	"fmt"
 	"github.com/metafates/pat/constant"
 	"github.com/metafates/pat/filesystem"
 	"github.com/metafates/pat/log"
@@ -35,13 +34,7 @@ func (w *Wrapper) Available() bool {
 func (w *Wrapper) save(script string) error {
 	w.backup()
 
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf(".%s.%s", constant.App, w.shell.Bin())
-	file, err := filesystem.Api().OpenFile(filepath.Join(home, filename), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
+	file, err := filesystem.Api().OpenFile(w.shell.WhereScript(), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		return err
 	}

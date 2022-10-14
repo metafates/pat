@@ -1,21 +1,22 @@
 package util
 
 import (
+	"github.com/samber/lo"
 	"os"
 	"strings"
 )
 
-func ResolveTilde(path string) (string, error) {
-	dir, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
+func ResolveTilde(path string) string {
+	// we do not care about cases where home dir is not present,
+	// since pat is supposed to work with non-virtual environments,
+	// so it's assumed that home dir is always present
+	home := lo.Must(os.UserHomeDir())
 
 	if path == "~" {
-		return dir, nil
+		return home
 	} else if strings.HasPrefix(path, "~/") {
-		return dir + path[1:], nil
+		return home + path[1:]
 	}
 
-	return path, nil
+	return path
 }

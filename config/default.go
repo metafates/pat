@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/metafates/pat/constant"
+	"github.com/metafates/pat/util"
 	"github.com/spf13/viper"
 )
 
@@ -28,6 +29,30 @@ panic, fatal, error, warn, info, debug, trace`,
 		"Enable backup",
 	},
 	// END BACKUP
+
+	// FISH
+	{
+		constant.FishScriptPath,
+		util.ResolveTilde("~"),
+		"Fish script path",
+	},
+	// END FISH
+
+	// ZSH
+	{
+		constant.ZshScriptPath,
+		util.ResolveTilde("~"),
+		"Zsh script path",
+	},
+	// END ZSH
+
+	// BASH
+	{
+		constant.BashScriptPath,
+		util.ResolveTilde("~"),
+		"Bash script path",
+	},
+	// END BASH
 }
 
 func setDefaults() {
