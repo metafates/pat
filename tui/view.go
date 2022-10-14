@@ -47,7 +47,7 @@ func (m *Model) viewConfirmActions() string {
 			continue
 		}
 
-		builder.WriteString(lipgloss.NewStyle().Underline(true).Render(p))
+		builder.WriteString(lipgloss.NewStyle().Render(p))
 		builder.WriteString(" ")
 		builder.WriteString(icon.Arrow)
 		builder.WriteString(" ")
