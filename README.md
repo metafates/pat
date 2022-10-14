@@ -11,6 +11,7 @@ https://user-images.githubusercontent.com/62389790/195914752-6da84193-e39d-4296-
 - [What?](#what-is-this)
 - [How?](#how-to-use) 
 - [Install](#installation)
+- [Keybinds](#keybinds)
 
 ## What is this?
 
@@ -110,3 +111,21 @@ git clone https://github.com/metafates/pat.git
 cd pat
 make install
 ```
+
+## Keybinds
+
+| Keybind | Action                                   |
+|---------|------------------------------------------|
+| `p`     | Preview executables of the selected path |
+| `d`     | Move the selected path 1 position down   |
+| `u`     | Move the selected path 1 position up     |
+| `a`     | Add a new path                           |
+| `enter` | Select, Confirm                          |
+| `Y`     | Confirm actions                          |
+| `d`     | Remove selected path from `$PATH`        |
+| `s`     | Save                                     |
+| `c`     | Copy selected path                       |
+
+See also `pat help` to show available commands.
+
+For example, `pat config info`
