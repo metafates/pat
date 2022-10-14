@@ -156,6 +156,11 @@ pre_install() {
         die "Unable to get $PAT version."
     }
 
+    # test if tag is a semver
+    echo "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$' || {
+        die "Unable to get $PAT version."
+    }
+
     OS=$(uname -s)
     ARCH=$(uname -m)
     VERSION=${TAG#?}
