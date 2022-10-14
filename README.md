@@ -2,7 +2,7 @@
 
 <h3 align="center">
     <code>$PATH</code> Manager
-</h1>
+</h3>
 
 https://user-images.githubusercontent.com/62389790/195914752-6da84193-e39d-4296-9ef4-f94a95cf250e.mp4
 
@@ -19,6 +19,8 @@ Have you ever found yourself searching something like *"Adding a new entry to th
 annoying 💀
 
 ***Try Pat!*** It's a `$PATH` environment variable manager. It can reorder, delete and add new path entries with a fancy and easy TUI, so you don't have to remember any commands.
+
+> **Note** Pat is a work in progress, so bugs and missing features are expected. If you find any, please open an issue.
 
 Okay, let's move on!
 
