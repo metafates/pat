@@ -27,13 +27,19 @@ It will welcome you with this screen. Select `zsh` (you can move up by pressing 
 
 <img width="912" alt="Screenshot 2022-10-14 at 21 35 23" src="https://user-images.githubusercontent.com/62389790/195917180-9e20004f-8a75-4e62-977a-a71da1a39186.png">
 
-You will you paths. You can preview each (check what executables it contains) by pressing `p` (acronym for `preview`)
+You will see your paths. 
 
 <img width="912" alt="Screenshot 2022-10-14 at 21 37 02" src="https://user-images.githubusercontent.com/62389790/195917418-5ce27dac-33ec-44ca-831f-3e66af6ac899.png">
 
-Press `a` (for `add`) to add a new path. It will open a textinput with smart hints and autocompletion so you won't be lost or misspell something while typing
+You can preview each (check what executables it contains) by pressing `p` (acronym for `preview`)
 
-See, **pat** is smart! You will provide autocompletions while typing
+<img width="912" alt="Screenshot 2022-10-14 at 22 02 48" src="https://user-images.githubusercontent.com/62389790/195921762-2933c6e4-6469-4a18-aec4-8bab1a025ee9.png">
+
+Press `esc` to go back.
+
+Press `a` (for `add`) to add a new path. It will open a text input with smart hints and autocompletion so you won't be lost or misspell something while typing
+
+See, **pat** is smart! It will provide you autocompletions while typing
 
 <img width="912" alt="Screenshot 2022-10-14 at 21 41 24" src="https://user-images.githubusercontent.com/62389790/195918178-0f636fe5-d1c2-473e-951c-3fc6a72ccbcc.png">
 
@@ -49,7 +55,7 @@ Almost there! Now you will need to *save* it. Simply press `s` or `enter` to sav
 
 <img width="912" alt="Screenshot 2022-10-14 at 21 43 54" src="https://user-images.githubusercontent.com/62389790/195918581-45898bf2-433a-4325-8135-a3d121825483.png">
 
-Press `Y` to confirm. This keybind is inconvenient on purpose so you won't do anything 
+Press `Y` (uppercase y) to confirm. This keybind is inconvenient on purpose so you won't do anything 
 accidentally
 
 **LAST STEP**. You will need to do it only once and forget forever! 
@@ -75,4 +81,5 @@ For **Bash**
 ```bash
 echo "source $(path where --bash) &>/dev/null" >> ~/.profile
 ```
+
 
