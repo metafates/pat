@@ -44,7 +44,7 @@ export PATH`, content)
 }
 
 func (z *Zsh) makeExport(path string) string {
-	return fmt.Sprintf(`PATH="%[1]s:$PATH"
+	return fmt.Sprintf(`PATH="%s${PATH:+:${PATH}}"
 `, path)
 }
 
