@@ -32,7 +32,7 @@ func New() *Bash {
 }
 
 func (b *Bash) cmd(code string) *exec.Cmd {
-	return exec.Command(b.Name(), "-c", code)
+	return exec.Command(b.Name(), "-lc", code)
 }
 
 func (b *Bash) generateScript(content string) string {

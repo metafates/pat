@@ -60,9 +60,10 @@ func (w *Wrapper) save(script string) error {
 
 	if err != nil {
 		log.Error(err)
+		return err
 	}
 
-	return err
+	return nil
 }
 
 func (w *Wrapper) AddPath(path string) error {
