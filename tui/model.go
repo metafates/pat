@@ -46,6 +46,8 @@ type Model struct {
 	entriesPreviewC *list.Model
 	textInputC      *textinput.Model
 	helpC           *help.Model
+
+	toComplete mo.Option[string]
 }
 
 func NewModel() *Model {

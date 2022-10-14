@@ -10,6 +10,8 @@ type keymap struct {
 
 	Preview,
 
+	AcceptCompletion,
+
 	Select,
 	Confirm,
 	Remove,
@@ -38,8 +40,8 @@ func (k *keymap) ShortHelp() []key.Binding {
 		return []key.Binding{k.Select, k.Remove, k.Add, k.Save, k.Copy, k.Back}
 	case statePathAdd:
 		s := k.Select
-		s.SetHelp("enter", "Add the current path")
-		return []key.Binding{s, k.Back}
+		s.SetHelp("enter", "add the current path")
+		return []key.Binding{s, k.AcceptCompletion, k.Back}
 	case stateEntriesPreview:
 		return []key.Binding{k.Back}
 	default:
@@ -59,6 +61,10 @@ func (k *keymap) init() {
 	k.ForceQuit = key.NewBinding(
 		key.WithKeys("ctrl+c"),
 		key.WithHelp("ctrl+c", "quit"),
+	)
+	k.AcceptCompletion = key.NewBinding(
+		key.WithKeys("tab"),
+		key.WithHelp("tab", "accept completion"),
 	)
 	k.Select = key.NewBinding(
 		key.WithKeys("enter"),

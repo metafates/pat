@@ -1,17 +1,12 @@
 package tui
 
 import (
-	"fmt"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/metafates/pat/color"
-	"github.com/metafates/pat/filesystem"
 	"github.com/metafates/pat/icon"
-	"github.com/metafates/pat/path"
 	"github.com/metafates/pat/util"
 	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -82,57 +77,11 @@ func (m *Model) viewConfirmActions() string {
 }
 
 func (m *Model) viewPathAdd() string {
-	value := util.ResolveTilde(m.textInputC.Value())
-	exists, _ := filesystem.Api().Exists(value)
+	value := m.textInputC.Value()
 	var info string
 
-	if exists {
-		isDir, _ := filesystem.Api().IsDir(value)
-		if isDir {
-			p := path.New(value)
-			info = lipgloss.NewStyle().Foreground(color.Green).Render(fmt.Sprintf("Path exists, %s", util.Quantify(len(p.Entries()), "entry", "entries")))
-		} else {
-			info = lipgloss.NewStyle().Foreground(color.Red).Render("Path exists but it's not a directory")
-		}
-	} else {
-		dir := filepath.Dir(value)
-		entries, err := filesystem.Api().ReadDir(dir)
-
-		if err != nil {
-			info = lipgloss.NewStyle().Foreground(color.Red).Render("Path does not exist")
-		} else {
-			dirs := lo.FilterMap(entries, func(e os.FileInfo, _ int) (string, bool) {
-				// check if symlink is a directory
-				if e.Mode()&os.ModeSymlink != 0 {
-					realPath, err := filepath.EvalSymlinks(filepath.Join(dir, e.Name()))
-					if err != nil {
-						return "", false
-					}
-
-					isDir, err := filesystem.Api().IsDir(realPath)
-					if err != nil {
-						return "", false
-					}
-
-					if isDir {
-						return e.Name(), true
-					}
-				}
-
-				if !e.IsDir() {
-					return "", false
-				}
-
-				return e.Name(), true
-			})
-
-			closest := util.FindClosest(filepath.Base(value), dirs)
-			if closest.IsPresent() {
-				info = lipgloss.NewStyle().Foreground(color.Yellow).Render("Did you mean " + filepath.Join(dir, closest.MustGet()) + "?")
-			} else {
-				info = lipgloss.NewStyle().Foreground(color.Red).Render("Path does not exist")
-			}
-		}
+	if value != "" {
+		info = m.pathInfo(util.ResolveTilde(value))
 	}
 
 	return m.renderLines(true,

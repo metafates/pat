@@ -262,6 +262,10 @@ func (m *Model) updatePathAdd(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
+		case key.Matches(msg, m.keymap.AcceptCompletion) && m.toComplete.IsPresent():
+			m.textInputC.SetValue(m.toComplete.MustGet())
+			m.textInputC.SetCursor(len(m.toComplete.MustGet()))
+			m.toComplete = mo.None[string]()
 		case key.Matches(msg, m.keymap.Select) && m.textInputC.Value() != "":
 			m.popState()
 			p := path.New(m.textInputC.Value())
