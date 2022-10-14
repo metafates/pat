@@ -6,6 +6,12 @@
 
 https://user-images.githubusercontent.com/62389790/195914752-6da84193-e39d-4296-9ef4-f94a95cf250e.mp4
 
+## Table of contents
+
+- [What?](#what-is-this)
+- [How?](#how-to-use) 
+- [Install](#installation)
+
 ## What is this?
 
 Have you ever found yourself searching something like *"Adding a new entry to the PATH variable in ZSH"*, *"How to delete entry from PATH in bash"*, *"How to change order of the PATH entries in fish"*...? And then you forget how to do it and search it again, again and again... ughh, this is 
@@ -61,22 +67,21 @@ accidentally
 
 **LAST STEP**. You will need to do it only once and forget forever! 
 
-```sh
+```zsh
 echo "source $(pat where --zsh) &>/dev/null" >> ~/.zshenv
-source ~/.zshenv
 ```
 
 For any other shell steps are the same, except for the last one
 
 For **Fish**
-```fish
+```shell
 # If you know what you're doing, you can change config.fish to other file of course
 echo "source $(pat where --fish) &>/dev/null" >> ~/.config/fish/config.fish
-source ~/.config/fish/config.fish
 ```
 
 For **Bash**
 ```bash
 echo "source $(path where --bash) &>/dev/null" >> ~/.bashrc
-source ~/.bashrc
 ```
+
+## Installation
