@@ -91,7 +91,7 @@ func NewModel() *Model {
 		l.SetStatusBarItemName(singular, plural)
 		l.AdditionalShortHelpKeys = model.keymap.AdditionalShortHelpKeys
 		l.AdditionalFullHelpKeys = model.keymap.AdditionalFullHelpKeys
-		l.StatusMessageLifetime = time.Second * 3
+		l.StatusMessageLifetime = time.Millisecond * 1500
 		l.Styles.NoItems = model.styles.Padding
 		return &l
 	}

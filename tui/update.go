@@ -45,6 +45,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 
 				cmd = onListBack(m.pathSelectC)
+				m.onSave = make(map[string]action)
 			}
 
 			m.popState()
