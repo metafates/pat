@@ -85,3 +85,20 @@ echo "source $(path where --bash) &>/dev/null" >> ~/.bashrc
 ```
 
 ## Installation
+
+With `curl`
+```shell
+curl -sfFL pat.metafates.one/install | sh
+```
+
+With `wget`
+```shell
+wget -qO- pat.metafates.one/install | sh
+```
+
+Compile from source with `make`
+```shell
+git clone https://github.com/metafates/pat.git
+cd pat
+make install
+```
