@@ -86,6 +86,8 @@ echo "source $(path where --bash) &>/dev/null" >> ~/.bashrc
 
 ## Installation
 
+### Install Precompiled
+
 With `curl`
 ```shell
 curl -sfFL pat.metafates.one/install | sh
@@ -95,6 +97,12 @@ With `wget`
 ```shell
 wget -qO- pat.metafates.one/install | sh
 ```
+
+> This will install `pat` to the `~/.pat/bin` and automatically add it to your `$PATH`
+>
+> If it finds that pat is already installed it will update it wherever it is installed
+ 
+### Compile from source
 
 Compile from source with `make`
 ```shell
