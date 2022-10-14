@@ -69,7 +69,7 @@ func (w *Wrapper) backup() {
 
 		if len(backups.Backups) >= 3 {
 			// remove older backups if there are more than 3
-			log.Info("truncate backups")
+			log.Trace("truncate backups")
 			backups.Backups = []Backup{
 				backups.Backups[len(backups.Backups)-2],
 				backups.Backups[len(backups.Backups)-1],

@@ -3,7 +3,6 @@ package icon
 const (
 	Cross    = "✖"
 	Check    = "✔"
-	Trash    = "🗑"
 	Arrow    = "➜"
 	Info     = "ℹ"
 	Star     = "★"
