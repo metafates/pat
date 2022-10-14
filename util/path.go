@@ -3,10 +3,12 @@ package util
 import (
 	"github.com/samber/lo"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
 func ResolveTilde(path string) string {
+	path = filepath.Clean(path)
 	// we do not care about cases where home dir is not present,
 	// since pat is supposed to work with non-virtual environments,
 	// so it's assumed that home dir is always present

@@ -3,6 +3,7 @@ package path
 import (
 	"github.com/dustin/go-humanize"
 	"github.com/metafates/pat/filesystem"
+	"github.com/metafates/pat/util"
 	"github.com/samber/lo"
 	"github.com/samber/mo"
 	"os"
@@ -19,7 +20,7 @@ type Path struct {
 }
 
 func (p *Path) String() string {
-	return p.raw
+	return util.ResolveTilde(p.raw)
 }
 
 func New(path string) *Path {
