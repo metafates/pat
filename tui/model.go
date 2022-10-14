@@ -167,6 +167,16 @@ func (m *Model) reset() tea.Cmd {
 	)
 }
 
+func (m *Model) hasUnsaved() bool {
+	for _, a := range m.onSave {
+		if a != actionNone {
+			return true
+		}
+	}
+
+	return m.order.IsPresent()
+}
+
 func (m *Model) save() (err error) {
 	for p, a := range m.onSave {
 		switch a {

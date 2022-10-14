@@ -235,7 +235,7 @@ func (m *Model) updateConfirmActions(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, m.keymap.Reset):
 			m.popState()
 			return m, m.reset()
-		case key.Matches(msg, m.keymap.Confirm):
+		case key.Matches(msg, m.keymap.Confirm) && m.hasUnsaved():
 			err := m.save()
 			if err != nil {
 				m.raiseError(err)
