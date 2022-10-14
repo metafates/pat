@@ -20,8 +20,8 @@ type Model struct {
 	statesHistory *stack.Stack[state]
 	state         state
 
-	shells        []shell.Shell
-	selectedShell shell.Shell
+	shells        []*shell.Wrapper
+	selectedShell *shell.Wrapper
 
 	onSave map[string]action
 	order  mo.Option[[]string]
@@ -168,8 +168,6 @@ func (m *Model) reset() tea.Cmd {
 }
 
 func (m *Model) save() (err error) {
-	shell.Backup(m.selectedShell)
-
 	for p, a := range m.onSave {
 		switch a {
 		case actionRemove:
@@ -184,7 +182,7 @@ func (m *Model) save() (err error) {
 	}
 
 	if m.order.IsPresent() {
-		err = m.selectedShell.Overwrite(m.order.MustGet())
+		err = m.selectedShell.Export(m.order.MustGet())
 	}
 
 	return

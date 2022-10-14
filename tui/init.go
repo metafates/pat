@@ -20,8 +20,8 @@ func (m *Model) Init() (cmd tea.Cmd) {
 	} else {
 		m.pushState(stateShellSelect)
 		cmd = m.shellSelectC.SetItems(
-			lo.Map(m.shells, func(s shell.Shell, _ int) list.Item {
-				return m.newItem(s)
+			lo.Map(m.shells, func(w *shell.Wrapper, _ int) list.Item {
+				return m.newItem(w)
 			}),
 		)
 	}

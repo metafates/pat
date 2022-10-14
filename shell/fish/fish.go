@@ -2,11 +2,7 @@ package fish
 
 import (
 	"fmt"
-	"github.com/metafates/pat/constant"
-	"github.com/metafates/pat/filesystem"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -15,11 +11,19 @@ var fishArrayElementRegex = regexp.MustCompile(`(?m).*?\|(.*?)\|$`)
 
 type Fish struct{}
 
+func (f *Fish) CommentToken() string {
+	return "#"
+}
+
 func New() *Fish {
 	return &Fish{}
 }
 
 func (f *Fish) Name() string {
+	return "Fish"
+}
+
+func (f *Fish) Bin() string {
 	return "fish"
 }
 
@@ -27,68 +31,17 @@ func (f *Fish) cmd(code string) *exec.Cmd {
 	return exec.Command(f.Name(), "-c", code)
 }
 
-func (f *Fish) writeFile(content string) error {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf(".%s.%s", constant.App, f.Name())
-	file, err := filesystem.Api().OpenFile(filepath.Join(home, filename), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-
-	content = fmt.Sprintf(`set -g PATH
+func (f *Fish) generateScript(content string) string {
+	return fmt.Sprintf(`set --global PATH
 
 %s
 
-set -x PATH $PATH`, content)
-
-	_, err = file.WriteString(content)
-	return err
+set --export PATH $PATH`, content)
 }
 
 func (f *Fish) makeExport(path string) string {
 	return fmt.Sprintf(`set -a PATH "%s"
 `, path)
-}
-
-func (f *Fish) AddPath(path string) error {
-	builder := strings.Builder{}
-
-	paths, err := f.Paths()
-	if err != nil {
-		return err
-	}
-
-	builder.WriteString(f.makeExport(path))
-	for _, p := range paths {
-		builder.WriteString(f.makeExport(p))
-	}
-
-	return f.writeFile(builder.String())
-}
-
-func (f *Fish) RemovePath(path string) error {
-	builder := strings.Builder{}
-
-	paths, err := f.Paths()
-	if err != nil {
-		return err
-	}
-
-	for _, p := range paths {
-		if p == path {
-			continue
-		}
-
-		builder.WriteString(f.makeExport(p))
-	}
-
-	return f.writeFile(builder.String())
 }
 
 func (f *Fish) Paths() ([]string, error) {
@@ -109,20 +62,12 @@ func (f *Fish) Paths() ([]string, error) {
 	return paths, nil
 }
 
-func (f *Fish) Overwrite(paths []string) error {
+func (f *Fish) GenerateExport(paths []string) string {
 	builder := strings.Builder{}
 
 	for _, p := range paths {
 		builder.WriteString(f.makeExport(p))
 	}
 
-	return f.writeFile(builder.String())
-}
-
-func (f *Fish) Available() bool {
-	if _, err := exec.LookPath(f.Name()); err != nil {
-		return false
-	}
-
-	return true
+	return f.generateScript(builder.String())
 }

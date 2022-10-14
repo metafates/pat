@@ -13,19 +13,19 @@ import (
 	"time"
 )
 
-func Backup(shell Shell) {
+func (w *Wrapper) backup() {
 	if !viper.GetBool(constant.BackupEnabled) {
 		return
 	}
 
-	paths, err := shell.Paths()
+	paths, err := w.Paths()
 	if err != nil {
 		log.Errorf("failed to backup paths: %v", err)
 		return
 	}
 
 	log.Infof("backing up %d paths", len(paths))
-	fileName := filepath.Join(where.Backup(), fmt.Sprintf("backup.%s.toml", shell.Name()))
+	fileName := filepath.Join(where.Backup(), fmt.Sprintf("backup.%s.toml", w.Name()))
 
 	type Backup struct {
 		Date  string   `toml:"date"`

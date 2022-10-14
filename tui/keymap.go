@@ -59,11 +59,11 @@ func (k *keymap) init() {
 	)
 	k.MoveUp = key.NewBinding(
 		key.WithKeys("u"),
-		key.WithHelp("u", "Overwrite the selected item with the one above"),
+		key.WithHelp("u", "GenerateExport the selected item with the one above"),
 	)
 	k.MoveDown = key.NewBinding(
 		key.WithKeys("d"),
-		key.WithHelp("d", "Overwrite the selected item with the one below"),
+		key.WithHelp("d", "GenerateExport the selected item with the one below"),
 	)
 	k.Preview = key.NewBinding(
 		key.WithKeys("p"),

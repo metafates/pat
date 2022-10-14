@@ -9,8 +9,6 @@ import (
 	"github.com/metafates/pat/shell"
 	"github.com/metafates/pat/util"
 	"github.com/samber/lo"
-	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -26,9 +24,9 @@ func (m *Model) newItem(internal any) *item {
 
 func (i *item) marked() (markIcon string, marked bool) {
 	switch x := i.internal.(type) {
-	case shell.Shell:
-		marked = lo.Must(exec.LookPath(x.Name())) == filepath.Clean(os.Getenv("SHELL"))
-		markIcon = lipgloss.NewStyle().Foreground(color.Pink).Render(icon.Heart)
+	case *shell.Wrapper:
+		marked = x.IsDefault()
+		markIcon = lipgloss.NewStyle().Faint(true).Render("Default")
 		return
 	case *path.Path:
 		pathAction, ok := i.model.getAction(x)
@@ -51,7 +49,7 @@ func (i *item) marked() (markIcon string, marked bool) {
 
 func (i *item) FilterValue() string {
 	switch i := i.internal.(type) {
-	case shell.Shell:
+	case *shell.Wrapper:
 		return i.Name()
 	case *path.Path:
 		if i.IsDir() || !i.Exists() {
@@ -71,7 +69,7 @@ func (i *item) Title() string {
 	if markIcon, marked := i.marked(); marked {
 		title.WriteString(" ")
 		switch i.internal.(type) {
-		case shell.Shell:
+		case *shell.Wrapper:
 			title.WriteString(markIcon)
 		case *path.Path:
 			title.WriteString(markIcon)
@@ -83,8 +81,8 @@ func (i *item) Title() string {
 
 func (i *item) Description() string {
 	switch i := i.internal.(type) {
-	case shell.Shell:
-		return lo.Must(exec.LookPath(i.Name()))
+	case *shell.Wrapper:
+		return lo.Must(i.BinPath())
 	case *path.Path:
 		if !i.Exists() {
 			return "Nonexistent"

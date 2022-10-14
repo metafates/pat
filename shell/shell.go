@@ -4,27 +4,24 @@ import (
 	"github.com/metafates/pat/log"
 	"github.com/metafates/pat/shell/bash"
 	"github.com/metafates/pat/shell/fish"
-	"github.com/metafates/pat/shell/sh"
 	"github.com/metafates/pat/shell/zsh"
 	"github.com/samber/lo"
 )
 
-type Shell interface {
+type instance interface {
 	Name() string
-	AddPath(path string) error
-	RemovePath(path string) error
-	Overwrite(paths []string) error
+	Bin() string
+	CommentToken() string
+	GenerateExport(paths []string) (script string)
 	Paths() ([]string, error)
-	Available() bool
 }
 
-func AvailableShells() []Shell {
-	shells := lo.Filter([]Shell{
-		fish.New(),
-		zsh.New(),
-		bash.New(),
-		sh.New(),
-	}, func(shell Shell, _ int) bool {
+func AvailableShells() []*Wrapper {
+	shells := lo.Filter([]*Wrapper{
+		New(fish.New()),
+		New(zsh.New()),
+		New(bash.New()),
+	}, func(shell *Wrapper, _ int) bool {
 		return shell.Available()
 	})
 
