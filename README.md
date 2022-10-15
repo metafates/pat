@@ -119,17 +119,18 @@ make install
 
 ## Keybinds
 
-| Keybind | Action                                   |
-|---------|------------------------------------------|
-| `p`     | Preview executables of the selected path |
-| `d`     | Move the selected path 1 position down   |
-| `u`     | Move the selected path 1 position up     |
-| `a`     | Add a new path                           |
-| `enter` | Select, Confirm                          |
-| `Y`     | Confirm actions                          |
-| `d`     | Remove selected path from `$PATH`        |
-| `s`     | Save                                     |
-| `c`     | Copy selected path                       |
+| Keybind     | Action                                   |
+|-------------|------------------------------------------|
+| `p`         | Preview executables of the selected path |
+| `d`         | Move the selected path 1 position down   |
+| `u`         | Move the selected path 1 position up     |
+| `a`         | Add a new path                           |
+| `enter`     | Select, Confirm                          |
+| `Y`         | Confirm actions                          |
+| `d`         | Remove selected path from `$PATH`        |
+| `s`         | Save                                     |
+| `c`         | Copy selected path                       |
+| `backspace` | Undo unsaved changes                     |
 
 See also `pat help` to show available commands.
 
