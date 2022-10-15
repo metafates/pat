@@ -7,7 +7,7 @@ import (
 
 const (
 	App     = "pat"
-	Version = "0.0.1"
+	Version = "0.0.2"
 )
 
 const (
