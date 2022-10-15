@@ -70,27 +70,27 @@ func Upgrade() (err error) {
 		return
 	}
 
-	postUpgradeTemplate := lo.Must(template.New("post-upgrade").Parse(`
-{{ title "Welcome to {{ .App }} v{{ .Version }}" }}
-
-Report any bugs:
-
-    {{ faint "https://github.com/metafates/{{ .App }}/issues" }}
-
-What's new:
-
-    {{ cyan "https://github.com/metafates/{{ .App }}/releases/tag/v{{ .Version }}" }}
-
-Changelog:
-
-    {{ faint "https://github.com/metafates/{{ .App }}/compare/v{{ .OldVersion }}...v{{ .Version }}" }}
-`))
-
-	_ = postUpgradeTemplate.Funcs(map[string]any{
+	postUpgradeTemplate := lo.Must(template.New("post-upgrade").Funcs(template.FuncMap{
 		"cyan":  lipgloss.NewStyle().Foreground(color.Cyan).Render,
 		"faint": lipgloss.NewStyle().Faint(true).Render,
 		"title": lipgloss.NewStyle().Bold(true).Foreground(color.Green).Render,
-	}).Execute(os.Stdout, struct {
+	}).Parse(`
+Welcome to {{ .App }} v{{ .Version }}
+
+Report any bugs:
+
+    https://github.com/metafates/{{ .App }}/issues
+
+What's new:
+
+    https://github.com/metafates/{{ .App }}/releases/tag/v{{ .Version }}
+
+Changelog:
+
+    https://github.com/metafates/{{ .App }}/compare/v{{ .OldVersion }}...v{{ .Version }}
+`))
+
+	_ = postUpgradeTemplate.Execute(os.Stdout, struct {
 		App        string
 		Version    string
 		OldVersion string
