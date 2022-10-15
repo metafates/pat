@@ -13,10 +13,15 @@ add_to_path() {
     if has fish;
     then
         fish -c "set -U fish_user_paths $1 \$fish_user_paths"
-    elif has zsh;
+    fi
+
+    if has zsh && ! grep -q "$1" ~/.zshenv;
     then
         echo "export PATH=\"$1:\$PATH\"" >> ~/.zshenv
-    else
+    fi
+
+    if has bash && ! grep -q "$1" ~/.bashrc;
+    then
         echo "export PATH=\"$1:\$PATH\"" >> ~/.bashrc
     fi
 }
