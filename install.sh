@@ -137,7 +137,8 @@ install_binary() {
 
     mkdir -p "$OUT"
     info "Moving to ${OUT}"
-    sh -c "install -Dm755 '$TMPDIR/$FILE_BASENAME' '${OUT}'"
+    sh -c "install -m755 '$TMPDIR/$FILE_BASENAME' '${OUT}'"
+    add_to_path "$OUT"
 
     install_completions "$TMPDIR/completions"
 }
