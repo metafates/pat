@@ -53,21 +53,6 @@ snapshot:
 changelog:
   sort: asc
   use: github
-  groups:
-    - title: Dependency updates
-      regexp: "^.*feat\\(deps\\)*:+.*$"
-      order: 300
-    - title: 'New Features'
-      regexp: "^.*feat[(\\w)]*:+.*$"
-      order: 100
-    - title: 'Bug fixes'
-      regexp: "^.*fix[(\\w)]*:+.*$"
-      order: 200
-    - title: 'Documentation updates'
-      regexp: "^.*docs[(\\w)]*:+.*$"
-      order: 400
-    - title: Other work
-      order: 9999
   filters:
     exclude:
       - '^test'
