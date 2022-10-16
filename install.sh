@@ -12,7 +12,7 @@ has() {
 add_to_path() {
     if has fish;
     then
-        fish -c "set -U fish_user_paths $fish_user_paths $1"
+        fish -c "set -U fish_user_paths \$fish_user_paths $1"
     fi
 
     if has zsh && ! grep -q "$1" ~/.zshenv;
