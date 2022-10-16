@@ -85,12 +85,13 @@ func (m *Model) viewPathAdd() string {
 		info = m.pathInfo(util.ResolveTilde(value))
 	}
 
+	infoLines := strings.Split(info, "\n")
+	// prepend m.styles.Title.Render("Add path")
+	prepend := []string{m.styles.Title.Render("Add path"), "", m.textInputC.View(), ""}
+	lines := append(prepend, infoLines...)
+
 	return m.renderLines(true,
-		m.styles.Title.Render("Add path"),
-		"",
-		m.textInputC.View(),
-		"",
-		info,
+		lines...,
 	)
 }
 

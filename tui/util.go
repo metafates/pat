@@ -19,6 +19,8 @@ func (m *Model) pathInfo(p string) (info string) {
 	isAbs := filepath.IsAbs(p)
 	if !isAbs {
 		info = lipgloss.NewStyle().Foreground(color.Yellow).Render("Path is not absolute")
+		info += "\n\n"
+		info += lipgloss.NewStyle().Faint(true).Render(fmt.Sprintf("Will be expanded to %s", path.New(p).String()))
 		return
 	}
 
