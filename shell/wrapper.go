@@ -31,6 +31,10 @@ func (w *Wrapper) Available() bool {
 	return true
 }
 
+func (w *Wrapper) Bin() string {
+	return w.shell.Bin()
+}
+
 func (w *Wrapper) save(script string) error {
 	w.backup()
 

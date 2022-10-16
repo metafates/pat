@@ -29,3 +29,10 @@ func AvailableShells() []*Wrapper {
 	log.Infof("found %d available shells", len(shells))
 	return shells
 }
+
+func Get(name string) (wrapper *Wrapper, ok bool) {
+	wrapper, ok = lo.Find(AvailableShells(), func(w *Wrapper) bool {
+		return w.Bin() == name
+	})
+	return
+}
