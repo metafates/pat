@@ -12,7 +12,7 @@ has() {
 add_to_path() {
     if has fish;
     then
-        fish -c "set -U fish_user_paths \$fish_user_paths $1"
+        echo "set --export PATH \$HOME/.pat/bin \$PATH" >> ~/.config/fish/config.fish
     fi
 
     if has zsh && ! grep -q "$1" ~/.zshenv;
