@@ -2,12 +2,14 @@ package cmd
 
 import (
 	"github.com/metafates/pat/cli"
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(cliCmd)
 	cliCmd.PersistentFlags().StringVarP(&options.Shell, "shell", "s", "", "The shell to add the path to")
+	lo.Must0(cliCmd.MarkPersistentFlagRequired("shell"))
 }
 
 var cliCmd = &cobra.Command{
