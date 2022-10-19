@@ -33,7 +33,7 @@ panic, fatal, error, warn, info, debug, trace`,
 	// FISH
 	{
 		constant.FishScriptPath,
-		util.ResolveTilde("~"),
+		util.ResolveTilde("~/.pat"),
 		`Fish script path
 You can use ~ to represent your home directory`,
 	},
@@ -42,7 +42,7 @@ You can use ~ to represent your home directory`,
 	// ZSH
 	{
 		constant.ZshScriptPath,
-		util.ResolveTilde("~"),
+		util.ResolveTilde("~/.pat"),
 		`Zsh script path
 You can use ~ to represent your home directory`,
 	},
@@ -51,7 +51,7 @@ You can use ~ to represent your home directory`,
 	// BASH
 	{
 		constant.BashScriptPath,
-		util.ResolveTilde("~"),
+		util.ResolveTilde("~/.pat"),
 		`Bash script path
 You can use ~ to represent your home directory`,
 	},
